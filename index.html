@@ -2,9 +2,9 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>アルファベットゲーム</title>
+<title>ワードゲーム</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-<link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3JqNikmAOGJR72cu0i3ogg3K3lbHof--wmA&s" sizes="16×16" type="image/png" /> 
+<link rel="icon" href="https://i.pinimg.com/474x/19/f2/c9/19f2c9ef358b69a891ca373b321802c0.jpg" sizes="16×16" type="image/png" /> 
 <script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js"></script>
 
 <style>
@@ -176,7 +176,8 @@ const fruits=[
 ]; */
 /* 🍎 本家サイズ比 */
 const fruits=[ 
-{e:"A",r:14,s:10,d:0.001},{e:"B",r:15,s:12,d:0.0015},{e:"C",r:16,s:14,d:0.002},{e:"D",r:17,s:16,d:0.0025},{e:"E",r:18,s:18,d:0.003},{e:"F",r:20,s:20,d:0.0035},{e:"G",r:21,s:22,d:0.004},{e:"H",r:22,s:24,d:0.0045},{e:"I",r:23,s:26,d:0.005},{e:"J",r:24,s:28,d:0.0055},{e:"K",r:25,s:30,d:0.006},{e:"L",r:26,s:32,d:0.0065},{e:"M",r:27,s:34,d:0.007},{e:"N",r:28,s:36,d:0.0075},{e:"O",r:29,s:38,d:0.008},{e:"P",r:30,s:40,d:0.0085},{e:"Q",r:31,s:42,d:0.009},{e:"R",r:32,s:44,d:0.0095},{e:"S",r:33,s:42,d:0.01},{e:"T",r:34,s:44,d:0.015},{e:"U",r:35,s:46,d:0.020},{e:"V",r:36,s:48,d:0.025},{e:"W",r:37,s:50,d:0.03},{e:"X",r:38,s:52,d:0.035},{e:"Y",r:39,s:54,d:0.04},{e:"Z",r:50,s:70,d:0.080},
+{e:"あ",r:14,s:10,d:0.001},{e:"い",r:14,s:10,d:0.001},{e:"う",r:14,s:10,d:0.001},{e:"え",r:14,s:10,d:0.001},{e:"お",r:14,s:10,d:0.001}, {e:"か",r:18,s:20,d:0.0012},{e:"き",r:18,s:20,d:0.0012},{e:"く",r:18,s:20,d:0.0012},{e:"け",r:18,s:20,d:0.0012},{e:"こ",r:18,s:20,d:0.0012}, {e:"さ",r:23,s:40,d:0.0015},{e:"し",r:23,s:40,d:0.0015},{e:"す",r:23,s:40,d:0.0015},{e:"せ",r:23,s:40,d:0.0015},{e:"そ",r:23,s:40,d:0.0015}, {e:"た",r:28,s:80,d:0.0018},{e:"ち",r:28,s:80,d:0.0018},{e:"つ",r:28,s:80,d:0.0018},{e:"て",r:28,s:80,d:0.0018},{e:"と",r:28,s:80,d:0.0018}, {e:"な",r:33,s:160,d:0.0022},{e:"に",r:33,s:160,d:0.0022},{e:"ぬ",r:33,s:160,d:0.0022},{e:"ね",r:33,s:160,d:0.0022},{e:"の",r:33,s:160,d:0.0022}, {e:"は",r:38,s:320,d:0.0026},{e:"ひ",r:38,s:320,d:0.0026},{e:"ふ",r:38,s:320,d:0.0026},{e:"へ",r:38,s:320,d:0.0026},{e:"ほ",r:38,s:320,d:0.0026}, {e:"ま",r:44,s:640,d:0.003},{e:"み",r:44,s:640,d:0.003},{e:"む",r:44,s:640,d:0.003},{e:"め",r:44,s:640,d:0.003},{e:"も",r:44,s:640,d:0.003}, {e:"や",r:50,s:960,d:0.0032},{e:"ゆ",r:50,s:960,d:0.0032},{e:"よ",r:50,s:960,d:0.0032}, {e:"ら",r:56,s:1280,d:0.0035},{e:"れ",r:56,s:1280,d:0.0035},{e:"る",r:56,s:1280,d:0.0035},{e:"り",r:56,s:1280,d:0.0035},{e:"ら",r:56,s:1280,d:0.0035}, {e:"わ",r:62,s:2048,d:0.004},{e:"を",r:62,s:2048,d:0.004},{e:"ん",r:80,s:2560,d:0.0045},
+{e:"🤪",r:160,s:5120,d:0.006},
 ];
 
 
@@ -199,7 +200,7 @@ function scale(){
 window.addEventListener("resize",scale);
 scale();
 
-function rand(){return Math.floor(Math.random()*5);}
+function rand(){return Math.floor(Math.random()*30);}
 
 function updateUI(){
  scoreEl.textContent=score;
@@ -394,26 +395,26 @@ Events.on(engine,"collisionStart",e=>{
 Events.on(engine,"beforeUpdate",()=>{
  if(gameOver) return;
 
- const danger = engine.world.bodies.filter(b=>{
+ const isDanger = engine.world.bodies.some(b=>{
    if(b.fruitType===undefined) return false;
 
-   const top = b.position.y - b.circleRadius; // 上端
-   return top < 90; // 危険ライン
+   // 生成直後は無視（まだ上にあるため）
+   if(b.position.y < 197) return false;
+
+   const top = b.position.y - b.circleRadius;
+   return top < 130;
  });
 
- if(danger.length){
-  overTimer += engine.timing.delta;
-
-  if(overTimer > 800){
+ if(isDanger){
    gameOver = true;
    guide.style.display="none";
    overEl.style.display="flex";
    save();
-  }
- }else{
-  overTimer = 0;
  }
 });
+
+
+
 
 
 document.getElementById("resetBtn").onclick=fullReset;
